@@ -372,8 +372,8 @@ Gradioを使用し、以下の3つの検索モードを選択できるWeb画面�
 
 ## Author
 
-**Hein Zayar Oo**
-
-Tokyo University of Technology — School of Computer Science
+Hein Zayar Oo  
+日本工学院八王子専門学校（ITカレッジ 情報処理科）  
+東京工科大学（コンピューターサイエンス学部 コンピューターサイエンス学科）
 
 GitHub: [HeinZyrOo](https://github.com/HeinZyrOo)
