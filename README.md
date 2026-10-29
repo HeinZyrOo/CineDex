@@ -43,7 +43,6 @@ This project aims to explore how AI can understand relationships between movies 
 - Sentence Transformers
 - all-MiniLM-L6-v2
 - FAISS
-- Scikit-learn (planned for Phase B)
 
 ### Development Environment
 
@@ -271,7 +270,6 @@ Sentence TransformersとFAISSを使用し、映画情報の意味的な類似度
 - Sentence Transformers
 - all-MiniLM-L6-v2
 - FAISS
-- Scikit-learn（Phase Bで使用予定）
 
 ### 開発環境
 
