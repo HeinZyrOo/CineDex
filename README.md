@@ -211,10 +211,8 @@ demo.launch()
 
 ## Future Improvements
 
-- Quantitative evaluation of recommendation relevance
-- Comparison of search latency and computational cost
-- Hybrid recommendation combining TF-IDF and semantic embeddings
-- Improved movie title matching
+- Develop Phase B: Personalized Movie Recommendation System using Collaborative Filtering and Matrix Factorization based on users'      rating histories and preferences
+- Develop Phase C: Hybrid Recommendation System combining content-based and collaborative filtering approaches
 - More advanced Gradio interface
 - Permanent web application deployment
 
@@ -394,10 +392,8 @@ Google Colabで `CineDex_Phase_A.ipynb` を開き、TMDBデータセットをア
 
 ## 今後の改善予定
 
-- 推薦精度の定量的な評価
-- 検索速度と計算コストの比較
-- TF-IDFと意味的Embeddingを組み合わせたハイブリッド推薦
-- 映画タイトル検索機能の改善
+- Phase B：ユーザーの評価履歴や好みに基づき、協調フィルタリングと行列分解を利用したパーソナライズ映画推薦システムの開発
+- Phase C：コンテンツベース推薦と協調フィルタリングを組み合わせたハイブリッド推薦システムの開発
 - Webインターフェースの改良
 - Webアプリケーションの常時公開
 
