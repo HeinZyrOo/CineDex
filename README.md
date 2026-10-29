@@ -1,440 +1,417 @@
-# CineDex
-AI-powered movie recommendation system using Sentence Transformers and FAISS
+# CineDex — AI-Powered Movie Recommendation System
 
-# CineDex — AI Movie Recommendation System (English Version)
+## English Version
 
-CineDex is an AI-powered movie recommendation system developed using Natural Language Processing (NLP) and machine learning techniques.
+CineDex is an AI-powered movie recommendation system that uses Natural Language Processing (NLP), Sentence Transformers, TF-IDF, and FAISS to recommend movies based on content and semantic similarity.
 
-The system recommends movies based on semantic similarity using Sentence Transformers and FAISS (Facebook AI Similarity Search).
+The project implements and compares two recommendation approaches: traditional TF-IDF with cosine similarity and transformer-based semantic embeddings with FAISS.
 
-This project aims to explore how AI can understand relationships between movies and provide relevant recommendations beyond simple keyword matching.
-
-**Project Notebook:**
-
-[CineDex Phase A](https://github.com/HeinZyrOo/CineDex/blob/main/CineDex_Phase_A.ipynb)
-
----
+It also provides a Gradio web interface that allows users to search by movie title or natural-language description.
 
 ## Features
 
-- AI-based movie recommendations
-- Semantic similarity search using Sentence Transformers
-- Movie embedding generation
-- Efficient vector search using FAISS
-- Recommendation ranking based on similarity
-- Movie dataset preprocessing
-- Development and experimentation using Google Colab
-
----
+- Movie recommendations using TF-IDF and Cosine Similarity
+- Semantic recommendations using Sentence Transformers and FAISS
+- Natural-language movie search
+- Comparison of two recommendation algorithms
+- Interactive Gradio web interface
+- Model and vector index saving/loading
+- Processing of 4,800 movies from the TMDB dataset
 
 ## Tech Stack
 
-### Programming Language
-
-- Python
-
-### Data Processing
-
-- Pandas
-- NumPy
-
-### AI / Machine Learning
-
-- Sentence Transformers
-- all-MiniLM-L6-v2
-- FAISS
-
-### Development Environment
-
-- Google Colab
-- Jupyter Notebook
-- Git / GitHub
-
----
+| Category | Technologies |
+|---|---|
+| Language | Python |
+| Data Processing | Pandas, NumPy |
+| Traditional NLP | TF-IDF, Scikit-learn, Cosine Similarity |
+| Semantic AI | Sentence Transformers, all-MiniLM-L6-v2 |
+| Vector Search | FAISS |
+| Web Interface | Gradio |
+| Model Storage | Joblib, NumPy, FAISS |
+| Development | Google Colab, Jupyter Notebook, GitHub |
 
 ## System Architecture
 
 ```text
-Movie Dataset
-      |
-      v
-Data Preprocessing
-      |
-      v
-Movie Text Data
-      |
-      v
-Sentence Transformers
-(all-MiniLM-L6-v2)
-      |
-      v
-Movie Embeddings
-      |
-      v
-FAISS Vector Index
-      |
-      v
-Similarity Search
-      |
-      v
-Top Similar Movies
-      |
-      v
-Movie Recommendations
+TMDB 5000 Movie Dataset
+          |
+          v
+    Data Preprocessing
+          |
+          v
+ Overview + Genres + Keywords
+          |
+          v
+     Movie Tags
+          |
+     +----+----------------+
+     |                     |
+     v                     v
+   TF-IDF           Sentence Transformers
+     |                all-MiniLM-L6-v2
+     v                     |
+ Sparse Vectors            v
+     |               Dense Embeddings
+     v                 (384 dimensions)
+ Cosine Similarity          |
+     |                     v
+     |                FAISS Index
+     |                     |
+     v                     v
+ TF-IDF Results      Semantic Results
+     |                     |
+     +----------+----------+
+                |
+                v
+         Gradio Interface
+                |
+                v
+       Movie Recommendations
 ```
 
----
+## Dataset
+
+The project uses the **TMDB 5000 Movie Dataset**.
+
+- Original dataset: 4,803 movies
+- Processed dataset: 4,800 movies
+- Features: movie titles, overviews, genres, and keywords
+
+The preprocessing pipeline removes missing or duplicate records, extracts genres and keywords from JSON-formatted fields, and combines the information into movie tags.
+
+## Main Features
+
+### 1. TF-IDF Movie Recommendation
+
+The system uses `TfidfVectorizer` to convert movie tags into numerical vectors.
+
+Configuration:
+
+- Maximum features: 10,000
+- English stop-word removal
+- Unigrams and bigrams
+
+Cosine similarity is calculated between movie vectors to identify similar movies.
+
+The `recommend_tfidf()` function returns the top five recommendations and their similarity scores.
+
+### 2. Semantic Movie Recommendation
+
+The system uses the pre-trained `all-MiniLM-L6-v2` Sentence Transformer model to convert movie tags into 384-dimensional embeddings.
+
+These embeddings represent semantic information, allowing the system to identify movies with related meanings even when their descriptions use different words.
+
+FAISS `IndexFlatIP` performs nearest-neighbor searches over normalized embeddings.
+
+The `recommend_semantic()` function returns similar movies and their similarity scores.
+
+### 3. Natural-Language Movie Search
+
+Users can search for movies by entering a description instead of a specific title.
+
+Example:
+
+```text
+A science fiction movie about space exploration
+```
+
+The system converts the description into an embedding and searches the FAISS index for semantically similar movies.
+
+The results include movie titles, similarity scores, and overviews.
+
+### 4. Recommendation Method Comparison
+
+The project compares TF-IDF and Sentence Transformers using the same movie dataset.
+
+Example: **Interstellar**
+
+| TF-IDF Recommendations | Semantic Recommendations |
+|---|---|
+| Silent Running | Mission to Mars |
+| Mission to Mars | Prometheus |
+| 2001: A Space Odyssey | Gattaca |
+| Space Cowboys | The Inhabited Island |
+| Armageddon | Star Trek Beyond |
+
+Both methods produce relevant candidates, but their rankings differ because they represent text differently.
+
+The current comparison is qualitative. A quantitative evaluation is planned for future development.
+
+### 5. Gradio Web Interface
+
+The project includes an interactive web interface built with Gradio.
+
+Users can choose between three recommendation modes:
+
+1. **TF-IDF** — Search by movie title using cosine similarity.
+2. **Semantic (Movie Title)** — Search by movie title using Sentence Transformers and FAISS.
+3. **Semantic (Description)** — Search using natural-language descriptions.
+
+Results are displayed in a table.
+
+### 6. Model Saving and Loading
+
+The system supports saving and reloading:
+
+- Processed movie metadata
+- Sentence Transformer embeddings
+- FAISS vector index
+- TF-IDF vectorizer
+- TF-IDF feature matrix
+
+This allows previously generated data and indexes to be reused without repeating the entire preprocessing process.
 
 ## Project Structure
 
 ```text
 CineDex/
-│
 ├── CineDex_Phase_A.ipynb
+├── README.md
 │
-└── README.md
+├── data/
+│   └── processed/
+│       └── movies_processed.csv
+│
+└── models/
+    ├── movie_embeddings.npy
+    ├── movie_faiss.index
+    ├── tfidf_vectorizer.joblib
+    └── tfidf_matrix.joblib
 ```
 
-The project is currently developed in Google Colab using Jupyter Notebook.
+The `data/` and `models/` directories are generated when the notebook saves its artifacts. They may not be included in the GitHub repository.
 
----
+## Installation
 
-## Main Features
+Clone the repository:
 
-### Movie Data Processing
+```bash
+git clone https://github.com/HeinZyrOo/CineDex.git
+cd CineDex
+```
 
-The system prepares movie information from the dataset for recommendation processing.
+Install dependencies:
 
-The preprocessing stage includes:
+```bash
+pip install pandas numpy scikit-learn sentence-transformers faiss-cpu gradio joblib
+```
 
-- Loading movie data
-- Handling necessary text information
-- Preparing movie features
-- Creating text representations for AI processing
+Open the notebook in Google Colab:
 
-### Sentence Transformer Embeddings
+[Open CineDex in Google Colab](https://colab.research.google.com/github/HeinZyrOo/CineDex/blob/main/CineDex_Phase_A.ipynb)
 
-The system uses the pre-trained Sentence Transformer model `all-MiniLM-L6-v2`.
+Upload `tmdb_5000_movies.csv` when prompted, and run the notebook cells in order.
 
-This model converts movie text information into numerical vectors called embeddings.
+The Gradio interface can be launched with:
 
-Movies with similar semantic meanings are represented by vectors that are relatively close to each other.
-
-This enables the system to identify relationships between movies beyond exact keyword matching.
-
-### FAISS Similarity Search
-
-FAISS is used to perform efficient similarity searches on movie embeddings.
-
-The system:
-
-- Generates embeddings for movies
-- Stores vectors in a FAISS index
-- Searches for nearest-neighbor vectors
-- Retrieves movies with similar representations
-
-FAISS provides an efficient method for searching large collections of high-dimensional vectors.
-
-### Movie Recommendation
-
-The recommendation process follows these steps:
-
-1. A user selects a movie.
-2. The system identifies the movie's embedding.
-3. FAISS searches for similar vectors.
-4. Similar movies are ranked.
-5. The system returns recommended movies.
-
-This approach is based on content similarity rather than user rating history.
-
----
-
-## Development Phases
-
-### Phase A — Sentence Transformers + FAISS
-
-**Status: Initial implementation**
-
-The first phase focuses on semantic movie recommendations.
-
-Main technologies:
-
-- Sentence Transformers
-- Dense vector embeddings
-- FAISS similarity search
-
-### Phase B — TF-IDF + Cosine Similarity
-
-**Status: Planned**
-
-The second phase will implement a traditional content-based recommendation method.
-
-Main technologies:
-
-- TF-IDF Vectorization
-- Cosine Similarity
-- Movie genres and tags
-
-The goal is to compare traditional text-based similarity with transformer-based semantic similarity.
-
-### Model Comparison
-
-| Feature | Phase A | Phase B |
-|---|---|---|
-| Method | Semantic Similarity | Content-Based Similarity |
-| Model | Sentence Transformers | TF-IDF |
-| Search | FAISS | Cosine Similarity |
-| Representation | Dense Vectors | Sparse Vectors |
-| Status | Initial implementation | Planned |
-
-
----
+```python
+demo.launch()
+```
 
 ## Future Improvements
 
-- Implement Phase B using TF-IDF and cosine similarity
-- Compare recommendation methods
-- Evaluate recommendation accuracy and relevance
-- Optimize similarity search performance
-- Develop a user-friendly web interface
-- Explore hybrid recommendation techniques
-
----
+- Quantitative evaluation of recommendation relevance
+- Comparison of search latency and computational cost
+- Hybrid recommendation combining TF-IDF and semantic embeddings
+- Improved movie title matching
+- More advanced Gradio interface
+- Permanent web application deployment
 
 ## What I Learned
 
-Through this project, I learned:
+Through this project, I gained practical experience in:
 
-- Natural Language Processing fundamentals
-- Sentence Transformer models
-- Text embedding generation
+- Natural Language Processing and text preprocessing
+- TF-IDF vectorization and cosine similarity
+- Transformer-based sentence embeddings
 - Vector similarity search using FAISS
-- Content-based recommendation systems
-- Data preprocessing using Pandas
-- Integrating pre-trained AI models into Python applications
-- Developing machine learning projects using Google Colab
+- Building content-based recommendation systems
+- Comparing machine learning approaches
+- Integrating AI models into interactive applications
+- Saving and loading trained model artifacts
 
 ---
 
-## Author
+# CineDex — AI映画推薦システム
 
-**Hein Zayar Oo**
-
-Nippon Engineering College of Hachioji (IT College, Information Processing Department)
-
-Tokyo University of Technology (School of Computer Science, Department of Computer Science)
-
-GitHub: [HeinZyrOo](https://github.com/HeinZyrOo)
-
----
-
-# CineDex — AI映画推薦システム（日本語版）
+## 日本語版
 
 CineDexは、自然言語処理（NLP）と機械学習技術を活用したAI映画推薦システムです。
 
-Sentence TransformersとFAISSを使用し、映画情報の意味的な類似度に基づいて、ユーザーが選択した映画に似ている作品を推薦します。
+TF-IDFとコサイン類似度を利用した従来型の推薦手法と、Sentence TransformersおよびFAISSを利用した意味的類似度検索の2つの手法を実装し、推薦結果を比較しています。
 
-本プロジェクトでは、単純なキーワード一致だけでなく、AIによる意味的な特徴表現を利用した映画推薦の実現を目指しています。
-
-**プロジェクトNotebook：**
-
-[CineDex Phase A](https://github.com/HeinZyrOo/CineDex/blob/main/CineDex_Phase_A.ipynb)
-
----
+また、Gradioを利用したWebインターフェースを開発し、映画タイトルや自然言語による説明文から映画を検索できるようにしました。
 
 ## 主な機能
 
-- AIによる映画推薦
-- Sentence Transformersを利用した意味的類似度検索
-- 映画情報のEmbedding生成
-- FAISSによる高速ベクトル検索
-- 類似度に基づく推薦ランキング
-- 映画データの前処理
-- Google Colabを利用した開発・実験
-
----
+- TF-IDFとコサイン類似度による映画推薦
+- Sentence TransformersとFAISSによる意味的類似度検索
+- 自然言語による映画検索
+- 2種類の推薦アルゴリズムの比較
+- GradioによるWebインターフェース
+- モデルとベクトルインデックスの保存・読み込み
+- TMDBデータセットの4,800作品を対象とした推薦
 
 ## 使用技術
 
-### プログラミング言語
-
-- Python
-
-### データ処理
-
-- Pandas
-- NumPy
-
-### AI・機械学習
-
-- Sentence Transformers
-- all-MiniLM-L6-v2
-- FAISS
-
-### 開発環境
-
-- Google Colab
-- Jupyter Notebook
-- Git / GitHub
-
----
+| 分類 | 使用技術 |
+|---|---|
+| プログラミング言語 | Python |
+| データ処理 | Pandas, NumPy |
+| 自然言語処理 | TF-IDF, Scikit-learn |
+| AIモデル | Sentence Transformers, all-MiniLM-L6-v2 |
+| 類似度検索 | Cosine Similarity, FAISS |
+| Webインターフェース | Gradio |
+| データ保存 | Joblib, NumPy, FAISS |
+| 開発環境 | Google Colab, Jupyter Notebook |
 
 ## システム構成
 
 ```text
-映画データセット
-      |
-      v
-データ前処理
-      |
-      v
-映画テキストデータ
-      |
-      v
-Sentence Transformers
-(all-MiniLM-L6-v2)
-      |
-      v
-映画Embedding生成
-      |
-      v
-FAISSベクトルインデックス
-      |
-      v
-類似度検索
-      |
-      v
-類似映画の抽出
-      |
-      v
-映画推薦結果
+TMDB映画データセット
+        |
+        v
+    データ前処理
+        |
+        v
+概要 + ジャンル + キーワード
+        |
+        v
+     映画タグ
+        |
+   +----+------------------+
+   |                       |
+   v                       v
+ TF-IDF              Sentence Transformers
+   |                       |
+   v                       v
+特徴ベクトル          384次元Embedding
+   |                       |
+   v                       v
+コサイン類似度            FAISS
+   |                       |
+   v                       v
+推薦結果A               推薦結果B
+   |                       |
+   +-----------+-----------+
+               |
+               v
+        Gradio画面
+               |
+               v
+          映画推薦
 ```
 
----
+## データセット
 
-## プロジェクト構成
+TMDB 5000 Movie Datasetを使用しています。
 
-```text
-CineDex/
-│
-├── CineDex_Phase_A.ipynb
-│
-└── README.md
-```
+- 元データ：4,803作品
+- 前処理後：4,800作品
+- 使用情報：映画タイトル、概要、ジャンル、キーワード
 
-現在はGoogle Colab上でJupyter Notebookを利用して開発しています。
-
----
+欠損値や重複データを処理し、映画の概要・ジャンル・キーワードを組み合わせて推薦用のテキストデータを作成しています。
 
 ## 主な機能詳細
 
-### 映画データの前処理
+### 1. TF-IDFによる映画推薦
 
-映画データセットを読み込み、推薦処理に必要な情報を整理します。
+TF-IDFを使用し、映画のテキスト情報を特徴ベクトルに変換します。
 
-主な処理内容：
+最大10,000特徴量を使用し、英語のストップワードを除去するとともに、単語単位と2単語の組み合わせを考慮しています。
 
-- 映画データの読み込み
-- テキスト情報の整理
-- 推薦に使用する特徴量の準備
-- AIモデルに入力するテキストデータの作成
+その後、コサイン類似度を計算し、類似度の高い映画を上位5件推薦します。
 
-### Sentence TransformersによるEmbedding生成
+### 2. Sentence Transformersによる意味的推薦
 
-事前学習済みモデル `all-MiniLM-L6-v2` を使用し、映画のテキスト情報を数値ベクトルに変換します。
+事前学習済みモデル `all-MiniLM-L6-v2` を使用し、映画情報を384次元のEmbeddingに変換します。
 
-この数値ベクトルをEmbeddingと呼びます。
+EmbeddingをFAISSに登録することで、意味的に近い映画を効率的に検索します。
 
-意味的に似ている映画は、ベクトル空間上でも近い位置に表現される傾向があります。
+単語の一致だけでなく、文章の意味的な関係性を考慮した推薦を実現しています。
 
-これにより、単純な単語の一致だけでは発見しにくい映画同士の関連性を捉えることができます。
+### 3. 自然言語による映画検索
 
-### FAISSによる類似度検索
+ユーザーが映画の特徴を文章で入力すると、その内容に近い映画を推薦します。
 
-FAISSを利用して、映画Embeddingの高速な類似度検索を行います。
+入力例：
 
-処理の流れ：
+```text
+A science fiction movie about space exploration
+```
 
-1. 映画情報からEmbeddingを生成
-2. EmbeddingをFAISSに登録
-3. 選択した映画のベクトルを検索
-4. 類似するベクトルを持つ映画を抽出
-5. 類似度に基づいて推薦結果を表示
+入力文をSentence TransformersでEmbeddingに変換し、FAISSによって類似した映画を検索します。
 
-FAISSを利用することで、高次元ベクトルに対する効率的な近傍検索を実現します。
+### 4. 推薦手法の比較
 
-### 映画推薦機能
+TF-IDFとSentence Transformersの推薦結果を比較する機能を実装しました。
 
-ユーザーが映画を選択すると、システムはその映画のEmbeddingを取得します。
+「Interstellar」「The Dark Knight」「Avatar」などの映画を対象に、両手法が推薦する映画の違いを確認しています。
 
-次に、FAISSを利用して類似した映画を検索し、関連性の高い映画を推薦します。
+今後は、定量的な評価指標を導入して、推薦精度や検索性能を比較する予定です。
 
-この方式では、ユーザーの評価履歴ではなく、映画の内容に基づいて推薦を行います。
+### 5. GradioによるWebインターフェース
 
----
+Gradioを使用し、以下の3つの検索モードを選択できるWeb画面を実装しました。
 
-## 開発フェーズ
+- TF-IDF：映画タイトルによる推薦
+- Semantic (Movie Title)：意味的類似度に基づく映画タイトル検索
+- Semantic (Description)：自然言語による映画検索
 
-### Phase A — Sentence Transformers + FAISS
+推薦結果はテーブル形式で表示されます。
 
-**開発状況：初期実装**
+### 6. モデルの保存と読み込み
 
-Sentence TransformersとFAISSを利用した意味的類似度に基づく映画推薦システムです。
+学習済みの特徴表現や検索インデックスを保存し、再利用できるようにしています。
 
-主な技術：
+保存対象：
 
-- Sentence Transformers
-- Embedding
-- FAISS
+- 前処理済み映画データ
+- Sentence TransformerのEmbedding
+- FAISSインデックス
+- TF-IDFベクトライザー
+- TF-IDF行列
 
-### Phase B — TF-IDF + Cosine Similarity
+## 実行方法
 
-**開発状況：実装予定**
+リポジトリをクローンします。
 
-TF-IDFとコサイン類似度を利用した従来型のコンテンツベース推薦システムを実装する予定です。
+```bash
+git clone https://github.com/HeinZyrOo/CineDex.git
+cd CineDex
+```
 
-主な技術：
+必要なライブラリをインストールします。
 
-- TF-IDF
-- Cosine Similarity
-- 映画ジャンル・タグ情報
+```bash
+pip install pandas numpy scikit-learn sentence-transformers faiss-cpu gradio joblib
+```
 
-### 手法の比較
+Google Colabで `CineDex_Phase_A.ipynb` を開き、TMDBデータセットをアップロードして、各セルを順番に実行します。
 
-| 項目 | Phase A | Phase B |
-|---|---|---|
-| 推薦方法 | 意味的類似度 | テキスト特徴量の類似度 |
-| 使用モデル | Sentence Transformers | TF-IDF |
-| 検索技術 | FAISS | Cosine Similarity |
-| ベクトル表現 | Dense Vector | Sparse Vector |
-| 開発状況 | 初期実装 | 実装予定 |
-
-
----
+[Google Colabで開く](https://colab.research.google.com/github/HeinZyrOo/CineDex/blob/main/CineDex_Phase_A.ipynb)
 
 ## 今後の改善予定
 
-- TF-IDFとコサイン類似度を利用したPhase Bの実装
-- 推薦手法の比較実験
-- 推薦精度と関連性の評価
-- 類似度検索の高速化
-- Webアプリケーションの開発
-- ハイブリッド推薦手法の検討
-
----
+- 推薦精度の定量的な評価
+- 検索速度と計算コストの比較
+- TF-IDFと意味的Embeddingを組み合わせたハイブリッド推薦
+- 映画タイトル検索機能の改善
+- Webインターフェースの改良
+- Webアプリケーションの常時公開
 
 ## このプロジェクトを通して学んだこと
 
-本プロジェクトを通して、以下の技術について学びました。
-
-- 自然言語処理の基礎
-- Sentence Transformersの仕組み
-- Embeddingによるテキストのベクトル化
-- FAISSを利用したベクトル類似度検索
-- コンテンツベース推薦システム
-- Pandasによるデータ前処理
-- 事前学習済みAIモデルの活用
-- Google Colabを利用した機械学習システムの開発
+- 自然言語処理とテキスト前処理
+- TF-IDFによる特徴量抽出
+- コサイン類似度の計算
+- Sentence TransformersによるEmbedding生成
+- FAISSを利用したベクトル検索
+- コンテンツベース推薦システムの開発
+- 異なる推薦手法の比較
+- Gradioを利用したAIアプリケーションの開発
+- モデルと検索インデックスの保存・再利用
 
 ---
 
@@ -442,8 +419,6 @@ TF-IDFとコサイン類似度を利用した従来型のコンテンツベー�
 
 **Hein Zayar Oo**
 
-日本工学院八王子専門学校（ITカレッジ 情報処理科）
-
-東京工科大学（コンピューターサイエンス学部 コンピューターサイエンス学科）
+Tokyo University of Technology — School of Computer Science
 
 GitHub: [HeinZyrOo](https://github.com/HeinZyrOo)
