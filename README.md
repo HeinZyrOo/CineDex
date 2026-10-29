@@ -182,32 +182,9 @@ CineDex/
 
 The `data/` and `models/` directories are generated when the notebook saves its artifacts. They may not be included in the GitHub repository.
 
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/HeinZyrOo/CineDex.git
-cd CineDex
 ```
 
-Install dependencies:
 
-```bash
-pip install pandas numpy scikit-learn sentence-transformers faiss-cpu gradio joblib
-```
-
-Open the notebook in Google Colab:
-
-[Open CineDex in Google Colab](https://colab.research.google.com/github/HeinZyrOo/CineDex/blob/main/CineDex_Phase_A.ipynb)
-
-Upload `tmdb_5000_movies.csv` when prompted, and run the notebook cells in order.
-
-The Gradio interface can be launched with:
-
-```python
-demo.launch()
-```
 
 ## Future Improvements
 
@@ -371,24 +348,6 @@ Gradioを使用し、以下の3つの検索モードを選択できるWeb画面�
 - TF-IDFベクトライザー
 - TF-IDF行列
 
-## 実行方法
-
-リポジトリをクローンします。
-
-```bash
-git clone https://github.com/HeinZyrOo/CineDex.git
-cd CineDex
-```
-
-必要なライブラリをインストールします。
-
-```bash
-pip install pandas numpy scikit-learn sentence-transformers faiss-cpu gradio joblib
-```
-
-Google Colabで `CineDex_Phase_A.ipynb` を開き、TMDBデータセットをアップロードして、各セルを順番に実行します。
-
-[Google Colabで開く](https://colab.research.google.com/github/HeinZyrOo/CineDex/blob/main/CineDex_Phase_A.ipynb)
 
 ## 今後の改善予定
 
