@@ -320,11 +320,19 @@ A science fiction movie about space exploration
 
 ### 4. 推薦手法の比較
 
-TF-IDFとSentence Transformersの推薦結果を比較する機能を実装しました。
+本プロジェクトでは、同じ映画データセットを使用し、TF-IDFとSentence Transformersによる推薦結果を比較しています。
 
-「Interstellar」「The Dark Knight」「Avatar」などの映画を対象に、両手法が推薦する映画の違いを確認しています。
+比較例：**Interstellar（インターステラー）**
 
-今後は、定量的な評価指標を導入して、推薦精度や検索性能を比較する予定です。
+| **TF-IDFによる推薦結果** | **Sentence Transformersによる推薦結果** |
+|---|---|
+| Silent Running | Mission to Mars |
+| Mission to Mars | Prometheus |
+| 2001: A Space Odyssey | Gattaca |
+| Space Cowboys | The Inhabited Island |
+| Armageddon | Star Trek Beyond |
+
+どちらの手法でも関連性のある映画が推薦されていますが、テキストの特徴を表現する方法が異なるため、推薦される映画やその順位に違いが見られます。
 
 ### 5. GradioによるWebインターフェース
 
