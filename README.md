@@ -182,7 +182,7 @@ CineDex/
 
 The `data/` and `models/` directories are generated when the notebook saves its artifacts. They may not be included in the GitHub repository.
 
-```
+
 
 
 
